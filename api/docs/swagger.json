@@ -13,7 +13,7 @@
     "host": "localhost:4444",
     "basePath": "/travel",
     "paths": {
-        "/{id}/GetProfile": {
+        "/users/{id}/GetProfile": {
             "get": {
                 "security": [
                     {

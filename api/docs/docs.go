@@ -19,7 +19,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/{id}/GetProfile": {
+        "/users/{id}/GetProfile": {
             "get": {
                 "security": [
                     {

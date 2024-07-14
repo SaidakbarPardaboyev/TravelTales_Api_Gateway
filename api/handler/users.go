@@ -18,7 +18,7 @@ import (
 // @Success 200 {object} users.ResponseGetProfile "returns users info"
 // @Failure 400 {object} models.Error "It occurs when user enter invalid params"
 // @Failure 500 {object} models.Error "It occurs when error happenes internal service"
-// @Router /{id}/GetProfile [get]
+// @Router /users/{id}/GetProfile [get]
 func (h *Handler) GetProfile(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if id == "" {

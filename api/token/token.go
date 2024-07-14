@@ -15,9 +15,11 @@ func ValidateToken(tokenstr string) (bool, error) {
 }
 
 func ExtractClaims(tokenstr string) (*jwt.MapClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenstr, jwt.MapClaims{}, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenstr, jwt.MapClaims{}, func(
+		t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v",
+				t.Header["alg"])
 		}
 		return []byte(config.Load().SINGNING_KEY_ACCESS), nil
 	})

@@ -8,6 +8,6 @@ import (
 func main() {
 
 	r := api.NewRouter()
-	r.Run(":" + config.Load().API_GATEWAY_PORT)
+	r.Run(config.Load().API_GATEWAY_PORT)
 
 }

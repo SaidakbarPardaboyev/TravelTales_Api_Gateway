@@ -36,7 +36,7 @@ info:
   title: TravelTales App
   version: "1.0"
 paths:
-  /{id}/GetProfile:
+  /users/{id}/GetProfile:
     get:
       consumes:
       - application/json
