@@ -1,0 +1,75 @@
+basePath: /travel
+definitions:
+  models.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  users.ResponseGetProfile:
+    properties:
+      bio:
+        type: string
+      countries_visited:
+        type: integer
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:4444
+info:
+  contact:
+    email: '"pardaboyevsaidakbar103@gmail.com"'
+    name: Saidakbar
+    url: http://www.support_me_with_smile
+  description: Sayohatchilar o'rtasida tajriba almashish, sayohat rejalarini tuzish
+    va boshqalar bilan bo'lishish imkoniyatini yaratish orqali global sayohat hamjamiyatini
+    shakllantirish.
+  title: TravelTales App
+  version: "1.0"
+paths:
+  /{id}/GetProfile:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting a user information
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns users info
+          schema:
+            $ref: '#/definitions/users.ResponseGetProfile'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User information
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,3 @@
+[submodule "TravelTales_proto"]
+	path = TravelTales_proto
+	url = git@github.com:SaidakbarPardaboyev/TravelTales_proto.git
