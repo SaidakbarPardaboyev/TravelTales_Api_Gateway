@@ -251,6 +251,161 @@
                 }
             }
         },
+        "/users/{id}/follow": {
+            "post": {
+                "description": "this is for following user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Follow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required and followoreId is taking from params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.RequestFollow"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns all ditails about following",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseFollow"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/followers": {
+            "get": {
+                "description": "this is for getting followers information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get Followers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns followers information",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseGetFollowers"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/statistic": {
+            "get": {
+                "description": "This endpoint is for taking User's Statistic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get User's Statistic",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return user's statistics",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseGetUserStatistic"
+                        }
+                    },
+                    "400": {
+                        "description": "Occurs when user enters invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Occurs when an internal service error happens",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}/validate": {
             "get": {
                 "description": "this is for chacking user is exists",
@@ -305,6 +460,20 @@
                 }
             }
         },
+        "users.Follower": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "users.RequestEditProfile": {
             "type": "object",
             "properties": {
@@ -318,6 +487,17 @@
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.RequestFollow": {
+            "type": "object",
+            "properties": {
+                "follower_id": {
+                    "type": "string"
+                },
+                "following_id": {
                     "type": "string"
                 }
             }
@@ -367,6 +547,40 @@
                 }
             }
         },
+        "users.ResponseFollow": {
+            "type": "object",
+            "properties": {
+                "followed_at": {
+                    "type": "string"
+                },
+                "follower_id": {
+                    "type": "string"
+                },
+                "following_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.ResponseGetFollowers": {
+            "type": "object",
+            "properties": {
+                "followers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/users.Follower"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "users.ResponseGetProfile": {
             "type": "object",
             "properties": {
@@ -392,6 +606,29 @@
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.ResponseGetUserStatistic": {
+            "type": "object",
+            "properties": {
+                "comments_count": {
+                    "type": "integer"
+                },
+                "countries_visited": {
+                    "type": "integer"
+                },
+                "last_active": {
+                    "type": "string"
+                },
+                "likes_received": {
+                    "type": "integer"
+                },
+                "stories_count": {
+                    "type": "integer"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }

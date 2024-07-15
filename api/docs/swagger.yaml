@@ -5,6 +5,15 @@ definitions:
       message:
         type: string
     type: object
+  users.Follower:
+    properties:
+      full_name:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
   users.RequestEditProfile:
     properties:
       bio:
@@ -14,6 +23,13 @@ definitions:
       full_name:
         type: string
       id:
+        type: string
+    type: object
+  users.RequestFollow:
+    properties:
+      follower_id:
+        type: string
+      following_id:
         type: string
     type: object
   users.RequestUpdatePassword:
@@ -45,6 +61,28 @@ definitions:
       username:
         type: string
     type: object
+  users.ResponseFollow:
+    properties:
+      followed_at:
+        type: string
+      follower_id:
+        type: string
+      following_id:
+        type: string
+    type: object
+  users.ResponseGetFollowers:
+    properties:
+      followers:
+        items:
+          $ref: '#/definitions/users.Follower'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
   users.ResponseGetProfile:
     properties:
       bio:
@@ -62,6 +100,21 @@ definitions:
       updated_at:
         type: string
       username:
+        type: string
+    type: object
+  users.ResponseGetUserStatistic:
+    properties:
+      comments_count:
+        type: integer
+      countries_visited:
+        type: integer
+      last_active:
+        type: string
+      likes_received:
+        type: integer
+      stories_count:
+        type: integer
+      user_id:
         type: string
     type: object
   users.ResponseGetUsers:
@@ -235,6 +288,109 @@ paths:
           schema:
             $ref: '#/definitions/models.Error'
       summary: Edit Profile
+      tags:
+      - users
+  /users/{id}/follow:
+    post:
+      consumes:
+      - application/json
+      description: this is for following user
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required and followoreId is taking from params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.RequestFollow'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns all ditails about following
+          schema:
+            $ref: '#/definitions/users.ResponseFollow'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Follow
+      tags:
+      - users
+  /users/{id}/followers:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting followers information
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: limit is required
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page is required
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns followers information
+          schema:
+            $ref: '#/definitions/users.ResponseGetFollowers'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get Followers
+      tags:
+      - users
+  /users/{id}/statistic:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint is for taking User's Statistic
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return user's statistics
+          schema:
+            $ref: '#/definitions/users.ResponseGetUserStatistic'
+        "400":
+          description: Occurs when user enters invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Occurs when an internal service error happens
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get User's Statistic
       tags:
       - users
   /users/{id}/validate:

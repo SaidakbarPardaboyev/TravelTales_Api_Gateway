@@ -279,6 +279,162 @@ func (h *Handler) UpdatePassword(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+// @Summary Get User's Statistic
+// @Description This endpoint is for taking User's Statistic
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} users.ResponseGetUserStatistic "return user's statistics"
+// @Failure 400 {object} models.Error "Occurs when user enters invalid params"
+// @Failure 500 {object} models.Error "Occurs when an internal service error happens"
+// @Router /users/{id}/statistic [get]
+func (h *Handler) GetUserStatistic(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+
+	req := pb.RequestGetUserStatistic{Id: id}
+
+	resp, err := h.UserClient.GetUserStatistic(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetUserStatistic method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetUserStatistic method: %s", err),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// @Summary Follow
+// @Description this is for following user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Param request body users.RequestFollow true "all params are required and followoreId is taking from params"
+// @Success 200 {object} users.ResponseFollow "returns all ditails about following"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /users/{id}/follow [post]
+func (h *Handler) Follow(ctx *gin.Context) {
+	req := pb.RequestFollow{}
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with decoding url body: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": fmt.Sprintf("Error with decoding url body: %s", err.Error()),
+		})
+		return
+	}
+
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+	req.FollowerId = id
+
+	resp, err := h.UserClient.Follow(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting Follow method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting Follow method: %s", err),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// @Summary Get Followers
+// @Description this is for getting followers information
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Param limit query int true "limit is required"
+// @Param page query int true "page is required"
+// @Success 200 {object} users.ResponseGetFollowers "returns followers information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /users/{id}/followers [get]
+func (h *Handler) GetFollowers(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+
+	req := pb.RequestGetFollowers{UserId: id}
+
+	limit, err := strconv.Atoi(ctx.Query("limit"))
+	if err != nil {
+		h.Logger.Error("limit param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "limit param is invalid",
+		})
+		return
+	}
+
+	page, err := strconv.Atoi(ctx.Query("page"))
+	if err != nil {
+		h.Logger.Error("page param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "page param is invalid",
+		})
+		return
+	}
+
+	req.Limit = int32(limit)
+	req.Page = int32(page)
+
+	resp, err := h.UserClient.GetFollowers(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetFollowers method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetFollowers method: %s", err),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// func (h *Handler) ValidateUser(ctx *gin.Context) {}
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}

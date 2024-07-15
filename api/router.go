@@ -39,6 +39,9 @@ func NewRouter() *gin.Engine {
 	users.GET("/", h.GetUsers)
 	users.DELETE("/:id/delete", h.DeleteUser)
 	users.PUT("/update", h.UpdatePassword)
+	users.GET("/:id/statistic", h.GetUserStatistic)
+	users.POST("/:id/follow", h.Follow)
+	users.GET("/:id/followers", h.GetFollowers)
 
 	return r
 }
