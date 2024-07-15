@@ -16,6 +16,13 @@ definitions:
       id:
         type: string
     type: object
+  users.RequestUpdatePassword:
+    properties:
+      email:
+        type: string
+      new_password:
+        type: string
+    type: object
   users.ResponseDeleteUser:
     properties:
       message:
@@ -69,6 +76,11 @@ definitions:
         items:
           $ref: '#/definitions/users.User'
         type: array
+    type: object
+  users.ResponseUpdatePassword:
+    properties:
+      message:
+        type: string
     type: object
   users.Status:
     properties:
@@ -252,6 +264,36 @@ paths:
           schema:
             $ref: '#/definitions/models.Error'
       summary: Validate User
+      tags:
+      - users
+  /users/update:
+    put:
+      consumes:
+      - application/json
+      description: This endpoint is for updating password
+      parameters:
+      - description: User ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.RequestUpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message about updating password
+          schema:
+            $ref: '#/definitions/users.ResponseUpdatePassword'
+        "400":
+          description: Occurs when user enters invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Occurs when an internal service error happens
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Update Password
       tags:
       - users
 securityDefinitions:

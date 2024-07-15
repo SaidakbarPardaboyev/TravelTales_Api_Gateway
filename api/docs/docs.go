@@ -70,6 +70,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/update": {
+            "put": {
+                "description": "This endpoint is for updating password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update Password",
+                "parameters": [
+                    {
+                        "description": "User ID",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.RequestUpdatePassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message about updating password",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseUpdatePassword"
+                        }
+                    },
+                    "400": {
+                        "description": "Occurs when user enters invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Occurs when an internal service error happens",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}/GetProfile": {
             "get": {
                 "description": "this is for getting a user information",
@@ -282,6 +328,17 @@ const docTemplate = `{
                 }
             }
         },
+        "users.RequestUpdatePassword": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "new_password": {
+                    "type": "string"
+                }
+            }
+        },
         "users.ResponseDeleteUser": {
             "type": "object",
             "properties": {
@@ -362,6 +419,14 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/users.User"
                     }
+                }
+            }
+        },
+        "users.ResponseUpdatePassword": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

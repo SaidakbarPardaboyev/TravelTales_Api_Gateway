@@ -7,6 +7,8 @@ import (
 	"strconv"
 	pb "travel/genproto/users"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
@@ -232,7 +234,51 @@ func (h *Handler) DeleteUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
+// @Summary Update Password
+// @Description This endpoint is for updating password
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param request body users.RequestUpdatePassword true "User ID"
+// @Success 200 {object} users.ResponseUpdatePassword "Message about updating password"
+// @Failure 400 {object} models.Error "Occurs when user enters invalid params"
+// @Failure 500 {object} models.Error "Occurs when an internal service error happens"
+// @Router /users/update [put]
+func (h *Handler) UpdatePassword(ctx *gin.Context) {
+	req := pb.RequestUpdatePassword{}
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with decoding url body: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": fmt.Sprintf("Error with decoding url body: %s", err.Error()),
+		})
+		return
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with hashing password: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with hashing password: %s", err.Error()),
+		})
+		return
+	}
+	req.NewPassword = string(hashedPassword)
+
+	resp, err := h.UserClient.UpdatePassword(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting UpdatePassword method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting UpdatePassword method: %s", err),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}
 // func (h *Handler) ValidateUser(ctx *gin.Context) {}
