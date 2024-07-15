@@ -13,13 +13,59 @@
     "host": "localhost:4444",
     "basePath": "/travel",
     "paths": {
-        "/users/{id}/GetProfile": {
+        "/users": {
             "get": {
-                "security": [
+                "description": "this is for getting user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get Users info",
+                "parameters": [
                     {
-                        "ApiKeyAuth": []
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "returns users information",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseGetUsers"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/GetProfile": {
+            "get": {
                 "description": "this is for getting a user information",
                 "consumes": [
                     "application/json"
@@ -61,6 +107,147 @@
                     }
                 }
             }
+        },
+        "/users/{id}/delete": {
+            "delete": {
+                "description": "This endpoint is for deleting a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message about deleting user",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseDeleteUser"
+                        }
+                    },
+                    "400": {
+                        "description": "Occurs when user enters invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Occurs when an internal service error happens",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/editprofile": {
+            "post": {
+                "description": "this is for editing user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Edit Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.RequestEditProfile"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns user information about existing user",
+                        "schema": {
+                            "$ref": "#/definitions/users.ResponseEditProfile"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/validate": {
+            "get": {
+                "description": "this is for chacking user is exists",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Validate User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns boolean value about existing user",
+                        "schema": {
+                            "$ref": "#/definitions/users.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -68,6 +255,57 @@
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.RequestEditProfile": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "countries_visited": {
+                    "type": "integer"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.ResponseDeleteUser": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.ResponseEditProfile": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "countries_visited": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -94,6 +332,51 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.ResponseGetUsers": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/users.User"
+                    }
+                }
+            }
+        },
+        "users.Status": {
+            "type": "object",
+            "properties": {
+                "Success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "users.User": {
+            "type": "object",
+            "properties": {
+                "countries_visited": {
+                    "type": "integer"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "username": {

@@ -17,7 +17,7 @@ func ValidateToken(tokenstr string) (bool, error) {
 func ExtractClaims(tokenstr string) (*jwt.MapClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenstr, jwt.MapClaims{}, func(
 		t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); ok {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v",
 				t.Header["alg"])
 		}
@@ -29,12 +29,12 @@ func ExtractClaims(tokenstr string) (*jwt.MapClaims, error) {
 	}
 
 	if !token.Valid {
-		return nil, fmt.Errorf("invalid token: %s", err)
+		return nil, fmt.Errorf("invalid token")
 	}
 
-	claims, ok := token.Claims.(*jwt.MapClaims)
+	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return nil, fmt.Errorf("invalid token claims: %s", err)
 	}
-	return claims, nil
+	return &claims, nil
 }

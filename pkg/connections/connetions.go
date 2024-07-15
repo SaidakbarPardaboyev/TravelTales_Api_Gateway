@@ -10,7 +10,8 @@ import (
 )
 
 func NewUserClient() pb.UsersClient {
-	conn, err := grpc.NewClient(":"+config.Load().USER_SERVICE_PORT, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(config.Load().USER_SERVICE_PORT,
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -14,16 +14,16 @@ func Middleware() gin.HandlerFunc {
 		auth := ctx.GetHeader("Authorization")
 
 		if auth == "" {
-			log.Printf("id not found from url params")
+			log.Printf("authorization header is required")
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 				"error":   "http.StatusBadRequest",
-				"massege": "id not found from url params",
+				"massege": "authorization header is required",
 			})
 			return
 		}
 
 		valid, err := token.ValidateToken(auth)
-		if !valid || err != nil {
+		if err != nil || !valid {
 			log.Printf("error while validating token: %s", err)
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 				"error":   "http.StatusBadRequest",
@@ -32,6 +32,14 @@ func Middleware() gin.HandlerFunc {
 			return
 		}
 
+		// claims, err := token.ExtractClaims(auth)
+		// if err != nil || !valid {
+		// 	ctx.AbortWithStatusJSON(http.StatusBadRequest,
+		// 		fmt.Errorf("invalid token claims: %s", err))
+		// 	return
+		// }
+
+		// ctx.Set("claims", claims)
 		ctx.Next()
 	}
 }

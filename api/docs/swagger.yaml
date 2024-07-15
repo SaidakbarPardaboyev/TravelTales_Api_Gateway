@@ -5,6 +5,39 @@ definitions:
       message:
         type: string
     type: object
+  users.RequestEditProfile:
+    properties:
+      bio:
+        type: string
+      countries_visited:
+        type: integer
+      full_name:
+        type: string
+      id:
+        type: string
+    type: object
+  users.ResponseDeleteUser:
+    properties:
+      message:
+        type: string
+    type: object
+  users.ResponseEditProfile:
+    properties:
+      bio:
+        type: string
+      countries_visited:
+        type: integer
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
   users.ResponseGetProfile:
     properties:
       bio:
@@ -24,6 +57,35 @@ definitions:
       username:
         type: string
     type: object
+  users.ResponseGetUsers:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/users.User'
+        type: array
+    type: object
+  users.Status:
+    properties:
+      Success:
+        type: boolean
+    type: object
+  users.User:
+    properties:
+      countries_visited:
+        type: integer
+      full_name:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:4444
 info:
   contact:
@@ -36,6 +98,40 @@ info:
   title: TravelTales App
   version: "1.0"
 paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting user information
+      parameters:
+      - description: limit is required
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page is required
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns users information
+          schema:
+            $ref: '#/definitions/users.ResponseGetUsers'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get Users info
+      tags:
+      - users
   /users/{id}/GetProfile:
     get:
       consumes:
@@ -62,9 +158,100 @@ paths:
           description: It occurs when error happenes internal service
           schema:
             $ref: '#/definitions/models.Error'
-      security:
-      - ApiKeyAuth: []
       summary: Get User information
+      tags:
+      - users
+  /users/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This endpoint is for deleting a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message about deleting user
+          schema:
+            $ref: '#/definitions/users.ResponseDeleteUser'
+        "400":
+          description: Occurs when user enters invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Occurs when an internal service error happens
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Delete User
+      tags:
+      - users
+  /users/{id}/editprofile:
+    post:
+      consumes:
+      - application/json
+      description: this is for editing user information
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.RequestEditProfile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns user information about existing user
+          schema:
+            $ref: '#/definitions/users.ResponseEditProfile'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Edit Profile
+      tags:
+      - users
+  /users/{id}/validate:
+    get:
+      consumes:
+      - application/json
+      description: this is for chacking user is exists
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns boolean value about existing user
+          schema:
+            $ref: '#/definitions/users.Status'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Validate User
       tags:
       - users
 securityDefinitions:

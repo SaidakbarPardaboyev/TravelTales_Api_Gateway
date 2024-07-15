@@ -2,7 +2,6 @@ package api
 
 import (
 	"travel/api/handler"
-	"travel/api/middlewere"
 
 	_ "travel/api/docs"
 
@@ -31,10 +30,14 @@ func NewRouter() *gin.Engine {
 
 	h := handler.NewHandler()
 	travel := r.Group("/travel")
-	travel.Use(middlewere.Middleware())
+	// travel.Use(middlewere.Middleware())
 
 	users := travel.Group("/users")
 	users.GET("/:id/GetProfile", h.GetProfile)
+	users.GET("/:id/validate", h.ValidateUser)
+	users.POST("/:id/editprofile", h.EditProfile)
+	users.GET("/", h.GetUsers)
+	users.DELETE("/:id/delete", h.DeleteUser)
 
 	return r
 }
