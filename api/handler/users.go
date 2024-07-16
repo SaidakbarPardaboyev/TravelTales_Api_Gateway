@@ -279,41 +279,6 @@ func (h *Handler) UpdatePassword(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// @Summary Get User's Statistic
-// @Description This endpoint is for taking User's Statistic
-// @Tags users
-// @Accept json
-// @Produce json
-// @Param id path string true "User ID"
-// @Success 200 {object} users.ResponseGetUserStatistic "return user's statistics"
-// @Failure 400 {object} models.Error "Occurs when user enters invalid params"
-// @Failure 500 {object} models.Error "Occurs when an internal service error happens"
-// @Router /users/{id}/statistic [get]
-func (h *Handler) GetUserStatistic(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "" {
-		h.Logger.Error("id not found from url params")
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error":   "http.StatusBadRequest",
-			"massege": "id not found from url params",
-		})
-		return
-	}
-
-	req := pb.RequestGetUserStatistic{Id: id}
-
-	resp, err := h.UserClient.GetUserStatistic(ctx, &req)
-	if err != nil {
-		h.Logger.Error(fmt.Sprintf("error with requesting GetUserStatistic method: %s", err.Error()))
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"error":   "http.StatusInternalServerError",
-			"massege": fmt.Sprintf("Error with requesting GetUserStatistic method: %s", err),
-		})
-		return
-	}
-	ctx.JSON(http.StatusOK, resp)
-}
-
 // @Summary Follow
 // @Description this is for following user
 // @Tags users

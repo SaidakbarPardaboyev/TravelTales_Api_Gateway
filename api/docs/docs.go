@@ -19,6 +19,110 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/stories": {
+            "get": {
+                "description": "this is for getting stories information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Get stories info",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns stories information",
+                        "schema": {
+                            "$ref": "#/definitions/stories.ResponseGetStories"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/stories/{id}/edit": {
+            "put": {
+                "description": "this is for editing story",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Edit Story",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/stories.RequestEditStory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns story information",
+                        "schema": {
+                            "$ref": "#/definitions/stories.ResponseEditStory"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "this is for getting user information",
@@ -368,9 +472,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/statistic": {
-            "get": {
-                "description": "This endpoint is for taking User's Statistic",
+        "/users/{id}/stories/create": {
+            "post": {
+                "description": "this is for creating story",
                 "consumes": [
                     "application/json"
                 ],
@@ -378,33 +482,42 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Content"
                 ],
-                "summary": "Get User's Statistic",
+                "summary": "Create Story",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User ID",
+                        "description": "id is required",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/stories.RequestCreateStory"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "return user's statistics",
+                        "description": "returns story information",
                         "schema": {
-                            "$ref": "#/definitions/users.ResponseGetUserStatistic"
+                            "$ref": "#/definitions/stories.ResponseCreateStory"
                         }
                     },
                     "400": {
-                        "description": "Occurs when user enters invalid params",
+                        "description": "It occurs when user enter invalid params",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
                     },
                     "500": {
-                        "description": "Occurs when an internal service error happens",
+                        "description": "It occurs when error happenes internal service",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -462,6 +575,179 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.Author": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.RequestCreateStory": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "location": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.RequestEditStory": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "location": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.ResponseCreateStory": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.ResponseEditStory": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "stories.ResponseGetStories": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "stories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/stories.StoryForGet"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "stories.StoryForGet": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/stories.Author"
+                },
+                "comments_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "likes_count": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -612,29 +898,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "users.ResponseGetUserStatistic": {
-            "type": "object",
-            "properties": {
-                "comments_count": {
-                    "type": "integer"
-                },
-                "countries_visited": {
-                    "type": "integer"
-                },
-                "last_active": {
-                    "type": "string"
-                },
-                "likes_received": {
-                    "type": "integer"
-                },
-                "stories_count": {
-                    "type": "integer"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }

@@ -3,6 +3,7 @@ package connections
 import (
 	"log"
 	"travel/config"
+	pbStories "travel/genproto/stories"
 	pb "travel/genproto/users"
 
 	"google.golang.org/grpc"
@@ -17,4 +18,14 @@ func NewUserClient() pb.UsersClient {
 	}
 
 	return pb.NewUsersClient(conn)
+}
+
+func NewStoriesClient() pbStories.StoriesClient {
+	conn, err := grpc.NewClient(config.Load().CONTENT_SERVICE_PORT,
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return pbStories.NewStoriesClient(conn)
 }
