@@ -12,6 +12,15 @@ definitions:
       username:
         type: string
     type: object
+  stories.AuthorForGetStoryFullInfo:
+    properties:
+      full_name:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
   stories.RequestCreateStory:
     properties:
       author_id:
@@ -100,6 +109,31 @@ definitions:
         type: array
       total:
         type: integer
+    type: object
+  stories.ResponseGetStoryFullInfo:
+    properties:
+      author:
+        $ref: '#/definitions/stories.AuthorForGetStoryFullInfo'
+      comments_count:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      likes_count:
+        type: integer
+      location:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      updated_at:
+        type: string
     type: object
   stories.StoryForGet:
     properties:
@@ -328,6 +362,35 @@ paths:
           schema:
             $ref: '#/definitions/models.Error'
       summary: Edit Story
+      tags:
+      - Content
+  /stories/{id}/fullinfo:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting full information about a story
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns full story information
+          schema:
+            $ref: '#/definitions/stories.ResponseGetStoryFullInfo'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get Full Story Info
       tags:
       - Content
   /users:

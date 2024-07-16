@@ -174,10 +174,49 @@ func (h *Handler) GetStories(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateStory(ctx *gin.Context) {
+// @Summary Get Full Story Info
+// @Description this is for getting full information about a story
+// @Tags Content
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Success 200 {object} stories.ResponseGetStoryFullInfo "returns full story information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /stories/{id}/fullinfo [get]
+func (h *Handler) GetStoryFullInfo(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
 
-// }
+	if _, err := uuid.Parse(id); err != nil {
+		h.Logger.Error("invalid uuid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "invalid uuid",
+		})
+		return
+	}
+	req := pb.RequestGetStoryFullInfo{Id: id}
 
+	resp, err := h.StoriesClient.GetStoryFullInfo(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetStoryFullInfo method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetStoryFullInfo method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
 
 // func (h *Handler) CreateStory(ctx *gin.Context) {
 

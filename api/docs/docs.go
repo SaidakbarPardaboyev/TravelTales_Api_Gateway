@@ -123,6 +123,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/stories/{id}/fullinfo": {
+            "get": {
+                "description": "this is for getting full information about a story",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Get Full Story Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns full story information",
+                        "schema": {
+                            "$ref": "#/definitions/stories.ResponseGetStoryFullInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "this is for getting user information",
@@ -590,6 +634,20 @@ const docTemplate = `{
                 }
             }
         },
+        "stories.AuthorForGetStoryFullInfo": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "stories.RequestCreateStory": {
             "type": "object",
             "properties": {
@@ -723,6 +781,44 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "stories.ResponseGetStoryFullInfo": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/stories.AuthorForGetStoryFullInfo"
+                },
+                "comments_count": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "likes_count": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },

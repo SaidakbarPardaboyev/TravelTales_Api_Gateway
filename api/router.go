@@ -46,6 +46,7 @@ func NewRouter() *gin.Engine {
 	users.POST("/:id/stories/create", h.CreateStory)
 	stories.PUT("/:id/edit", h.EditStory)
 	stories.GET("/", h.GetStories)
+	stories.GET("/:id/fullinfo", h.GetStoryFullInfo)
 
 	return r
 }
