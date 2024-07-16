@@ -1,5 +1,58 @@
 basePath: /travel
 definitions:
+  interactions.Author:
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+    type: object
+  interactions.Comment:
+    properties:
+      author:
+        $ref: '#/definitions/interactions.Author'
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+    type: object
+  interactions.RequestCreateComment:
+    properties:
+      author_id:
+        type: string
+      content:
+        type: string
+      story_id:
+        type: string
+    type: object
+  interactions.ResponseCreateComment:
+    properties:
+      author_id:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      story_id:
+        type: string
+    type: object
+  interactions.ResponseGetComments:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/interactions.Comment'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
   models.Error:
     properties:
       message:
@@ -300,6 +353,36 @@ info:
   title: TravelTales App
   version: "1.0"
 paths:
+  /interaction/comment/create:
+    post:
+      consumes:
+      - application/json
+      description: this is for writing comment to story
+      parameters:
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interactions.RequestCreateComment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns comment information
+          schema:
+            $ref: '#/definitions/interactions.ResponseCreateComment'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Write Comment To Story
+      tags:
+      - Content
   /stories:
     get:
       consumes:
@@ -332,6 +415,45 @@ paths:
           schema:
             $ref: '#/definitions/models.Error'
       summary: Get stories info
+      tags:
+      - Content
+  /stories/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting comments information
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: limit is required
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page is required
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns comments information
+          schema:
+            $ref: '#/definitions/interactions.ResponseGetComments'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get Comments info
       tags:
       - Content
   /stories/{id}/delete:

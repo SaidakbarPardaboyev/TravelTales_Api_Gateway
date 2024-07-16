@@ -49,5 +49,9 @@ func NewRouter() *gin.Engine {
 	stories.GET("/:id/fullinfo", h.GetStoryFullInfo)
 	stories.DELETE("/:id/delete", h.DeleteStory)
 
+	interactions := travel.Group("/interaction")
+	interactions.POST("/comment/create", h.CreateComment)
+	stories.GET("/:id/comments", h.GetComments)
+
 	return r
 }

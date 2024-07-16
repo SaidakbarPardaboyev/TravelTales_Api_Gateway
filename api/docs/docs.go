@@ -19,6 +19,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/interaction/comment/create": {
+            "post": {
+                "description": "this is for writing comment to story",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Write Comment To Story",
+                "parameters": [
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/interactions.RequestCreateComment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns comment information",
+                        "schema": {
+                            "$ref": "#/definitions/interactions.ResponseCreateComment"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/stories": {
             "get": {
                 "description": "this is for getting stories information",
@@ -53,6 +99,64 @@ const docTemplate = `{
                         "description": "returns stories information",
                         "schema": {
                             "$ref": "#/definitions/stories.ResponseGetStories"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/stories/{id}/comments": {
+            "get": {
+                "description": "this is for getting comments information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Get Comments info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns comments information",
+                        "schema": {
+                            "$ref": "#/definitions/interactions.ResponseGetComments"
                         }
                     },
                     "400": {
@@ -659,6 +763,88 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "interactions.Author": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "interactions.Comment": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/interactions.Author"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "interactions.RequestCreateComment": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "story_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "interactions.ResponseCreateComment": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "story_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "interactions.ResponseGetComments": {
+            "type": "object",
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/interactions.Comment"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Error": {
             "type": "object",
             "properties": {
