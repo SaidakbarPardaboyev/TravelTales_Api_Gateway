@@ -13,7 +13,7 @@ import (
 
 // @Summary Write Comment To Story
 // @Description this is for writing comment to story
-// @Tags Content
+// @Tags Interaction
 // @Accept json
 // @Produce json
 // @Param request body interactions.RequestCreateComment true "all params are required"
@@ -49,7 +49,7 @@ func (h *Handler) CreateComment(ctx *gin.Context) {
 
 // @Summary Get Comments info
 // @Description this is for getting comments information
-// @Tags Content
+// @Tags Interaction
 // @Accept json
 // @Produce json
 // @Param id path string true "id is required"
@@ -118,4 +118,59 @@ func (h *Handler) GetComments(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateComment(ctx *gin.Context) {}
+// @Summary Like Story
+// @Description this is for liking stories
+// @Tags Interaction
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Param request body interactions.RequestLikeStory true "all params are required"
+// @Success 200 {object} interactions.ResponseLikeStory "returns like information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /stories/{id}/like [post]
+func (h *Handler) LikeStory(ctx *gin.Context) {
+	storyId := ctx.Param("id")
+	if storyId == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+
+	if _, err := uuid.Parse(storyId); err != nil {
+		h.Logger.Error("invalid uuid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "invalid uuid",
+		})
+		return
+	}
+
+	req := pb.RequestLikeStory{}
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with decoding url body: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": fmt.Sprintf("Error with decoding url body: %s", err.Error()),
+		})
+		return
+	}
+	req.StoryId = storyId
+
+	resp, err := h.InterationsClient.LikeStory(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting LikeStory method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting LikeStory method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}

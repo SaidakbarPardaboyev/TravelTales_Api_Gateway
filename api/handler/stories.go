@@ -13,7 +13,7 @@ import (
 
 // @Summary Create Story
 // @Description this is for creating story
-// @Tags Content
+// @Tags Stories
 // @Accept json
 // @Produce json
 // @Param id path string true "id is required"
@@ -70,7 +70,7 @@ func (h *Handler) CreateStory(ctx *gin.Context) {
 
 // @Summary Edit Story
 // @Description this is for editing story
-// @Tags Content
+// @Tags Stories
 // @Accept json
 // @Produce json
 // @Param id path string true "id is required"
@@ -127,7 +127,7 @@ func (h *Handler) EditStory(ctx *gin.Context) {
 
 // @Summary Get stories info
 // @Description this is for getting stories information
-// @Tags Content
+// @Tags Stories
 // @Accept json
 // @Produce json
 // @Param limit query int true "limit is required"
@@ -176,7 +176,7 @@ func (h *Handler) GetStories(ctx *gin.Context) {
 
 // @Summary Get Full Story Info
 // @Description this is for getting full information about a story
-// @Tags Content
+// @Tags Stories
 // @Accept json
 // @Produce json
 // @Param id path string true "id is required"
@@ -220,7 +220,7 @@ func (h *Handler) GetStoryFullInfo(ctx *gin.Context) {
 
 // @Summary Delete Story
 // @Description this is for deleting story
-// @Tags Content
+// @Tags Stories
 // @Accept json
 // @Produce json
 // @Param id path string true "id is required"

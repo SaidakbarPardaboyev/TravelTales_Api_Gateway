@@ -27,6 +27,13 @@ definitions:
       story_id:
         type: string
     type: object
+  interactions.RequestLikeStory:
+    properties:
+      story_id:
+        type: string
+      user_id:
+        type: string
+    type: object
   interactions.ResponseCreateComment:
     properties:
       author_id:
@@ -52,6 +59,15 @@ definitions:
         type: integer
       total:
         type: integer
+    type: object
+  interactions.ResponseLikeStory:
+    properties:
+      liked_at:
+        type: string
+      story_id:
+        type: string
+      user_id:
+        type: string
     type: object
   models.Error:
     properties:
@@ -382,7 +398,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Write Comment To Story
       tags:
-      - Content
+      - Interaction
   /stories:
     get:
       consumes:
@@ -416,7 +432,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Get stories info
       tags:
-      - Content
+      - Stories
   /stories/{id}/comments:
     get:
       consumes:
@@ -455,7 +471,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Get Comments info
       tags:
-      - Content
+      - Interaction
   /stories/{id}/delete:
     delete:
       consumes:
@@ -484,7 +500,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Delete Story
       tags:
-      - Content
+      - Stories
   /stories/{id}/edit:
     put:
       consumes:
@@ -519,7 +535,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Edit Story
       tags:
-      - Content
+      - Stories
   /stories/{id}/fullinfo:
     get:
       consumes:
@@ -548,7 +564,42 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Get Full Story Info
       tags:
-      - Content
+      - Stories
+  /stories/{id}/like:
+    post:
+      consumes:
+      - application/json
+      description: this is for liking stories
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interactions.RequestLikeStory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns like information
+          schema:
+            $ref: '#/definitions/interactions.ResponseLikeStory'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Like Story
+      tags:
+      - Interaction
   /users:
     get:
       consumes:
@@ -784,7 +835,7 @@ paths:
             $ref: '#/definitions/models.Error'
       summary: Create Story
       tags:
-      - Content
+      - Stories
   /users/{id}/validate:
     get:
       consumes:

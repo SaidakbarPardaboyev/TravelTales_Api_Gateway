@@ -29,7 +29,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Interaction"
                 ],
                 "summary": "Write Comment To Story",
                 "parameters": [
@@ -75,7 +75,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Stories"
                 ],
                 "summary": "Get stories info",
                 "parameters": [
@@ -126,7 +126,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Interaction"
                 ],
                 "summary": "Get Comments info",
                 "parameters": [
@@ -184,7 +184,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Stories"
                 ],
                 "summary": "Delete Story",
                 "parameters": [
@@ -228,7 +228,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Stories"
                 ],
                 "summary": "Edit Story",
                 "parameters": [
@@ -281,7 +281,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Stories"
                 ],
                 "summary": "Get Full Story Info",
                 "parameters": [
@@ -298,6 +298,59 @@ const docTemplate = `{
                         "description": "returns full story information",
                         "schema": {
                             "$ref": "#/definitions/stories.ResponseGetStoryFullInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/stories/{id}/like": {
+            "post": {
+                "description": "this is for liking stories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Interaction"
+                ],
+                "summary": "Like Story",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/interactions.RequestLikeStory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns like information",
+                        "schema": {
+                            "$ref": "#/definitions/interactions.ResponseLikeStory"
                         }
                     },
                     "400": {
@@ -674,7 +727,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Content"
+                    "Stories"
                 ],
                 "summary": "Create Story",
                 "parameters": [
@@ -805,6 +858,17 @@ const docTemplate = `{
                 }
             }
         },
+        "interactions.RequestLikeStory": {
+            "type": "object",
+            "properties": {
+                "story_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "interactions.ResponseCreateComment": {
             "type": "object",
             "properties": {
@@ -842,6 +906,20 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "interactions.ResponseLikeStory": {
+            "type": "object",
+            "properties": {
+                "liked_at": {
+                    "type": "string"
+                },
+                "story_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
