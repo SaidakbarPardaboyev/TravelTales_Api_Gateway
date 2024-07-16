@@ -47,6 +47,7 @@ func NewRouter() *gin.Engine {
 	stories.PUT("/:id/edit", h.EditStory)
 	stories.GET("/", h.GetStories)
 	stories.GET("/:id/fullinfo", h.GetStoryFullInfo)
+	stories.DELETE("/:id/delete", h.DeleteStory)
 
 	return r
 }

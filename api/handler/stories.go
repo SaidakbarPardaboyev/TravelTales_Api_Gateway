@@ -218,21 +218,46 @@ func (h *Handler) GetStoryFullInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateStory(ctx *gin.Context) {
+// @Summary Delete Story
+// @Description this is for deleting story
+// @Tags Content
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Success 200 {object} stories.ResponseDeleteStory "returns message about deleting story"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /stories/{id}/delete [delete]
+func (h *Handler) DeleteStory(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
 
-// }
-// func (h *Handler) CreateStory(ctx *gin.Context) {
+	if _, err := uuid.Parse(id); err != nil {
+		h.Logger.Error("invalid uuid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "invalid uuid",
+		})
+		return
+	}
+	req := pb.RequestDeleteStory{StoryId: id}
 
-// }
-// func (h *Handler) CreateStory(ctx *gin.Context) {
+	resp, err := h.StoriesClient.DeleteStory(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting DeleteStory method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting DeleteStory method: %s", err),
+		})
+		return
+	}
 
-// }
-// func (h *Handler) CreateStory(ctx *gin.Context) {
-
-// }
-// func (h *Handler) CreateStory(ctx *gin.Context) {
-
-// }
-// func (h *Handler) CreateStory(ctx *gin.Context) {
-
-// }
+	ctx.JSON(http.StatusOK, resp)
+}

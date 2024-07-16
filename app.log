@@ -66,3 +66,5 @@ time=2024-07-16T14:09:58.113+05:00 level=ERROR msg="error with requesting GetSto
 time=2024-07-16T14:09:58.308+05:00 level=ERROR msg="error with requesting GetStoryFullInfo method: rpc error: code = Unknown desc = sql: no rows in result set"
 time=2024-07-16T14:09:58.562+05:00 level=ERROR msg="error with requesting GetStoryFullInfo method: rpc error: code = Unknown desc = sql: no rows in result set"
 time=2024-07-16T14:10:39.822+05:00 level=ERROR msg="error with requesting GetStoryFullInfo method: rpc error: code = Unknown desc = sql: no rows in result set"
+time=2024-07-16T14:33:27.498+05:00 level=ERROR msg="error with requesting DeleteStory method: rpc error: code = Unknown desc = story is not found with the id"
+time=2024-07-16T14:33:30.811+05:00 level=ERROR msg="error with requesting DeleteStory method: rpc error: code = Unknown desc = story is not found with the id"

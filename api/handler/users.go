@@ -385,29 +385,3 @@ func (h *Handler) GetFollowers(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
-
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
-// func (h *Handler) ValidateUser(ctx *gin.Context) {}
