@@ -91,3 +91,4 @@ time=2024-07-16T17:02:13.981+05:00 level=ERROR msg="error with requesting GetCom
 time=2024-07-16T18:33:56.962+05:00 level=ERROR msg="error with requesting LikeStory method: rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"string\""
 time=2024-07-16T18:35:09.422+05:00 level=ERROR msg="error with requesting LikeStory method: rpc error: code = Unknown desc = pq: duplicate key value violates unique constraint \"likes_pkey\""
 time=2024-07-16T18:35:38.661+05:00 level=ERROR msg="error with requesting LikeStory method: rpc error: code = Unknown desc = pq: duplicate key value violates unique constraint \"likes_pkey\""
+time=2024-07-16T22:04:11.408+05:00 level=ERROR msg="error with requesting CreateItineraries method: rpc error: code = Unimplemented desc = unknown service itineraries.itineraries"

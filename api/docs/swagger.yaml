@@ -69,6 +69,53 @@ definitions:
       user_id:
         type: string
     type: object
+  itineraries.Destination:
+    properties:
+      activities:
+        items:
+          type: string
+        type: array
+      end_date:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+    type: object
+  itineraries.RequestCreateItineraries:
+    properties:
+      auther_id:
+        type: string
+      description:
+        type: string
+      destinations:
+        items:
+          $ref: '#/definitions/itineraries.Destination'
+        type: array
+      end_date:
+        type: string
+      start_date:
+        type: string
+      title:
+        type: string
+    type: object
+  itineraries.ResponseCreateItineraries:
+    properties:
+      author_id:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      start_date:
+        type: string
+      title:
+        type: string
+    type: object
   models.Error:
     properties:
       message:
@@ -801,6 +848,41 @@ paths:
       summary: Get Followers
       tags:
       - users
+  /users/{id}/itineraries/create:
+    post:
+      consumes:
+      - application/json
+      description: this is for creating itineraries
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/itineraries.RequestCreateItineraries'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns itinerary information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseCreateItineraries'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Create Itineraries
+      tags:
+      - Itineraries
   /users/{id}/stories/create:
     post:
       consumes:

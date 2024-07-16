@@ -48,11 +48,14 @@ func NewRouter() *gin.Engine {
 	stories.GET("/", h.GetStories)
 	stories.GET("/:id/fullinfo", h.GetStoryFullInfo)
 	stories.DELETE("/:id/delete", h.DeleteStory)
-
+	
 	interactions := travel.Group("/interaction")
 	interactions.POST("/comment/create", h.CreateComment)
 	stories.GET("/:id/comments", h.GetComments)
 	stories.POST("/:id/like", h.LikeStory)
+	
+	// itineraries := travel.Group("/stories")
+	users.POST("/:id/itineraries/create", h.CreateItineraries)
 
 	return r
 }

@@ -4,7 +4,9 @@ import (
 	"log"
 	"travel/config"
 	pbInter "travel/genproto/interactions"
+	pbItiner "travel/genproto/itineraries"
 	pbStories "travel/genproto/stories"
+
 	pb "travel/genproto/users"
 
 	"google.golang.org/grpc"
@@ -39,4 +41,14 @@ func NewInteractionsClient() pbInter.InteractionsClient {
 	}
 
 	return pbInter.NewInteractionsClient(conn)
+}
+
+func NewItinerariesClient() pbItiner.ItinerariesClient {
+	conn, err := grpc.NewClient(config.Load().CONTENT_SERVICE_PORT,
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return pbItiner.NewItinerariesClient(conn)
 }
