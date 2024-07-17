@@ -154,6 +154,59 @@
                 }
             }
         },
+        "/itineraries/{id}/comment": {
+            "post": {
+                "description": "this is for commeting itinerary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Itineraries"
+                ],
+                "summary": "Writing Comment To Itineraries",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.RequestWriteCommentToItinerary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns new commet of itinerary information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseWriteCommentToItinerary"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/itineraries/{id}/edit": {
             "put": {
                 "description": "this is for editing itinerary",
@@ -1267,6 +1320,20 @@
                 }
             }
         },
+        "itineraries.RequestWriteCommentToItinerary": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "itinerary_id": {
+                    "type": "string"
+                }
+            }
+        },
         "itineraries.ResponseCreateItineraries": {
             "type": "object",
             "properties": {
@@ -1376,6 +1443,26 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "itineraries.ResponseWriteCommentToItinerary": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "itinerary_id": {
                     "type": "string"
                 }
             }

@@ -223,7 +223,64 @@ func (h *Handler) GetItineraryFullInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateItineraries(ctx *gin.Context) {}
+// @Summary Writing Comment To Itineraries
+// @Description this is for commeting itinerary
+// @Tags Itineraries
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Param request body itineraries.RequestWriteCommentToItinerary true "all params are required"
+// @Success 200 {object} itineraries.ResponseWriteCommentToItinerary "returns new commet of itinerary information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /itineraries/{id}/comment [post]
+func (h *Handler) WriteCommentToItinerary(ctx *gin.Context) {
+	req := pb.RequestWriteCommentToItinerary{}
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with decoding url body: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": fmt.Sprintf("Error with decoding url body: %s", err.Error()),
+		})
+		return
+	}
+
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+
+	if _, err := uuid.Parse(id); err != nil {
+		h.Logger.Error("invalid uuid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "invalid uuid",
+		})
+		return
+	}
+
+	req.ItineraryId = id
+
+	resp, err := h.ItinerariesClient.WriteCommentToItinerary(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting WriteCommentToItinerary method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting WriteCommentToItinerary method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}

@@ -166,6 +166,15 @@ definitions:
       title:
         type: string
     type: object
+  itineraries.RequestWriteCommentToItinerary:
+    properties:
+      author_id:
+        type: string
+      content:
+        type: string
+      itinerary_id:
+        type: string
+    type: object
   itineraries.ResponseCreateItineraries:
     properties:
       author_id:
@@ -238,6 +247,19 @@ definitions:
       title:
         type: string
       updated_at:
+        type: string
+    type: object
+  itineraries.ResponseWriteCommentToItinerary:
+    properties:
+      author_id:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      itinerary_id:
         type: string
     type: object
   models.Error:
@@ -631,6 +653,41 @@ paths:
           schema:
             $ref: '#/definitions/models.Error'
       summary: Get Itinerary Full Info
+      tags:
+      - Itineraries
+  /itineraries/{id}/comment:
+    post:
+      consumes:
+      - application/json
+      description: this is for commeting itinerary
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/itineraries.RequestWriteCommentToItinerary'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns new commet of itinerary information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseWriteCommentToItinerary'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Writing Comment To Itineraries
       tags:
       - Itineraries
   /itineraries/{id}/edit:
