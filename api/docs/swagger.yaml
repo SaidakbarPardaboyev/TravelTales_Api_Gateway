@@ -69,6 +69,13 @@ definitions:
       user_id:
         type: string
     type: object
+  itineraries.Activity:
+    properties:
+      activity:
+        type: string
+      id:
+        type: string
+    type: object
   itineraries.Destination:
     properties:
       activities:
@@ -76,6 +83,21 @@ definitions:
           type: string
         type: array
       end_date:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+    type: object
+  itineraries.DestinationEdit:
+    properties:
+      activities:
+        items:
+          $ref: '#/definitions/itineraries.Activity'
+        type: array
+      end_date:
+        type: string
+      id:
         type: string
       name:
         type: string
@@ -99,6 +121,25 @@ definitions:
       title:
         type: string
     type: object
+  itineraries.RequestEditItineraries:
+    properties:
+      author_id:
+        type: string
+      description:
+        type: string
+      destinations:
+        items:
+          $ref: '#/definitions/itineraries.DestinationEdit'
+        type: array
+      end_date:
+        type: string
+      id:
+        type: string
+      start_date:
+        type: string
+      title:
+        type: string
+    type: object
   itineraries.ResponseCreateItineraries:
     properties:
       author_id:
@@ -114,6 +155,23 @@ definitions:
       start_date:
         type: string
       title:
+        type: string
+    type: object
+  itineraries.ResponseEditItineraries:
+    properties:
+      author_id:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      start_date:
+        type: string
+      title:
+        type: string
+      updated_at:
         type: string
     type: object
   models.Error:
@@ -446,6 +504,41 @@ paths:
       summary: Write Comment To Story
       tags:
       - Interaction
+  /itineraries/{id}/edit:
+    put:
+      consumes:
+      - application/json
+      description: this is for editing itinerary
+      parameters:
+      - description: id is required
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/itineraries.RequestEditItineraries'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns itinerary information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseEditItineraries'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Edit Itinerary
+      tags:
+      - Itineraries
   /stories:
     get:
       consumes:

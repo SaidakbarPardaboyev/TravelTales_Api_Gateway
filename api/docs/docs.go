@@ -65,6 +65,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/itineraries/{id}/edit": {
+            "put": {
+                "description": "this is for editing itinerary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Itineraries"
+                ],
+                "summary": "Edit Itinerary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.RequestEditItineraries"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns itinerary information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseEditItineraries"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/stories": {
             "get": {
                 "description": "this is for getting stories information",
@@ -976,6 +1029,17 @@ const docTemplate = `{
                 }
             }
         },
+        "itineraries.Activity": {
+            "type": "object",
+            "properties": {
+                "activity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "itineraries.Destination": {
             "type": "object",
             "properties": {
@@ -986,6 +1050,29 @@ const docTemplate = `{
                     }
                 },
                 "end_date": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "itineraries.DestinationEdit": {
+            "type": "object",
+            "properties": {
+                "activities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/itineraries.Activity"
+                    }
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {
@@ -1022,6 +1109,35 @@ const docTemplate = `{
                 }
             }
         },
+        "itineraries.RequestEditItineraries": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "destinations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/itineraries.DestinationEdit"
+                    }
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "itineraries.ResponseCreateItineraries": {
             "type": "object",
             "properties": {
@@ -1044,6 +1160,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "itineraries.ResponseEditItineraries": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

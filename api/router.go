@@ -54,8 +54,9 @@ func NewRouter() *gin.Engine {
 	stories.GET("/:id/comments", h.GetComments)
 	stories.POST("/:id/like", h.LikeStory)
 	
-	// itineraries := travel.Group("/stories")
+	itineraries := travel.Group("/itineraries")
 	users.POST("/:id/itineraries/create", h.CreateItineraries)
+	itineraries.PUT("/:id/edit", h.EditItineraries)
 
 	return r
 }
