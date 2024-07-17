@@ -57,6 +57,7 @@ func NewRouter() *gin.Engine {
 	itineraries := travel.Group("/itineraries")
 	users.POST("/:id/itineraries/create", h.CreateItineraries)
 	itineraries.PUT("/:id/edit", h.EditItineraries)
+	itineraries.GET("/", h.GetAllItineraries)
 
 	return r
 }

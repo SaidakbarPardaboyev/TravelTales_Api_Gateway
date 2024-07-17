@@ -59,6 +59,57 @@
                 }
             }
         },
+        "/itineraries": {
+            "get": {
+                "description": "this is for getting all itineraries information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Itineraries"
+                ],
+                "summary": "Get All Itineraries",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns itineraries information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseGetAllItineraries"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/itineraries/{id}/edit": {
             "put": {
                 "description": "this is for editing itinerary",
@@ -1034,6 +1085,17 @@
                 }
             }
         },
+        "itineraries.Author": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "itineraries.Destination": {
             "type": "object",
             "properties": {
@@ -1073,6 +1135,35 @@
                     "type": "string"
                 },
                 "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "itineraries.Itinerary": {
+            "type": "object",
+            "properties": {
+                "auther": {
+                    "$ref": "#/definitions/itineraries.Author"
+                },
+                "comments_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "likes_count": {
+                    "type": "integer"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -1181,6 +1272,26 @@
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "itineraries.ResponseGetAllItineraries": {
+            "type": "object",
+            "properties": {
+                "itineraries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/itineraries.Itinerary"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },

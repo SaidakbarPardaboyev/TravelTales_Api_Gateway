@@ -76,6 +76,13 @@ definitions:
       id:
         type: string
     type: object
+  itineraries.Author:
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+    type: object
   itineraries.Destination:
     properties:
       activities:
@@ -102,6 +109,25 @@ definitions:
       name:
         type: string
       start_date:
+        type: string
+    type: object
+  itineraries.Itinerary:
+    properties:
+      auther:
+        $ref: '#/definitions/itineraries.Author'
+      comments_count:
+        type: integer
+      created_at:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      likes_count:
+        type: integer
+      start_date:
+        type: string
+      title:
         type: string
     type: object
   itineraries.RequestCreateItineraries:
@@ -173,6 +199,19 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  itineraries.ResponseGetAllItineraries:
+    properties:
+      itineraries:
+        items:
+          $ref: '#/definitions/itineraries.Itinerary'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
     type: object
   models.Error:
     properties:
@@ -504,6 +543,40 @@ paths:
       summary: Write Comment To Story
       tags:
       - Interaction
+  /itineraries:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting all itineraries information
+      parameters:
+      - description: limit is required
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page is required
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns itineraries information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseGetAllItineraries'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get All Itineraries
+      tags:
+      - Itineraries
   /itineraries/{id}/edit:
     put:
       consumes:

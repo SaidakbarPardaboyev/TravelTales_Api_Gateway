@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	pb "travel/genproto/itineraries"
 
 	"github.com/gin-gonic/gin"
@@ -126,7 +127,55 @@ func (h *Handler) EditItineraries(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateItineraries(ctx *gin.Context) {}
+// @Summary Get All Itineraries
+// @Description this is for getting all itineraries information
+// @Tags Itineraries
+// @Accept json
+// @Produce json
+// @Param limit query int true "limit is required"
+// @Param page query int true "page is required"
+// @Success 200 {object} itineraries.ResponseGetAllItineraries "returns itineraries information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /itineraries [get]
+func (h *Handler) GetAllItineraries(ctx *gin.Context) {
+	limit, err := strconv.Atoi(ctx.Query("limit"))
+	if err != nil {
+		h.Logger.Error("limit param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "limit param is invalid",
+		})
+		return
+	}
+
+	page, err := strconv.Atoi(ctx.Query("page"))
+	if err != nil {
+		h.Logger.Error("page param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "page param is invalid",
+		})
+		return
+	}
+
+	req := pb.RequestGetAllItineraries{
+		Limit: int32(limit),
+		Page:  int32(page),
+	}
+	resp, err := h.ItinerariesClient.GetAllItineraries(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetAllItineraries method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetAllItineraries method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
