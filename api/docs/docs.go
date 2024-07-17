@@ -19,6 +19,103 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/destination/create": {
+            "post": {
+                "description": "this is for creating destination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Destinations"
+                ],
+                "summary": "Create Destination",
+                "parameters": [
+                    {
+                        "description": "all params are required",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.RequestCreateDestination"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns new destination information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseCreateDestination"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/destination/top": {
+            "get": {
+                "description": "this is for getting top desctinations information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Destinations"
+                ],
+                "summary": "Get Top Destinations",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit is required",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page is required",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns top destinations' information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseGetDestinations"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/interaction/comment/create": {
             "post": {
                 "description": "this is for writing comment to story",
@@ -1242,6 +1339,23 @@ const docTemplate = `{
                 }
             }
         },
+        "itineraries.DestionationInfo": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "itineraries.Itinerary": {
             "type": "object",
             "properties": {
@@ -1268,6 +1382,35 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "itineraries.RequestCreateDestination": {
+            "type": "object",
+            "properties": {
+                "average_cost_per_day": {
+                    "type": "number"
+                },
+                "best_time_to_visit": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "popularity_score": {
+                    "type": "number"
                 }
             }
         },
@@ -1340,6 +1483,41 @@ const docTemplate = `{
                 }
             }
         },
+        "itineraries.ResponseCreateDestination": {
+            "type": "object",
+            "properties": {
+                "average_cost_per_day": {
+                    "type": "number"
+                },
+                "best_time_to_visit": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "popularity_score": {
+                    "type": "number"
+                }
+            }
+        },
         "itineraries.ResponseCreateItineraries": {
             "type": "object",
             "properties": {
@@ -1399,6 +1577,26 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/itineraries.Itinerary"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "itineraries.ResponseGetDestinations": {
+            "type": "object",
+            "properties": {
+                "destinations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/itineraries.DestionationInfo"
                     }
                 },
                 "limit": {

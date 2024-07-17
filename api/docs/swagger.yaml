@@ -111,6 +111,17 @@ definitions:
       start_date:
         type: string
     type: object
+  itineraries.DestionationInfo:
+    properties:
+      country:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   itineraries.Itinerary:
     properties:
       auther:
@@ -129,6 +140,25 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  itineraries.RequestCreateDestination:
+    properties:
+      average_cost_per_day:
+        type: number
+      best_time_to_visit:
+        type: string
+      country:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      language:
+        type: string
+      name:
+        type: string
+      popularity_score:
+        type: number
     type: object
   itineraries.RequestCreateItineraries:
     properties:
@@ -175,6 +205,29 @@ definitions:
       itinerary_id:
         type: string
     type: object
+  itineraries.ResponseCreateDestination:
+    properties:
+      average_cost_per_day:
+        type: number
+      best_time_to_visit:
+        type: string
+      country:
+        type: string
+      created_at:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      language:
+        type: string
+      name:
+        type: string
+      popularity_score:
+        type: number
+    type: object
   itineraries.ResponseCreateItineraries:
     properties:
       author_id:
@@ -214,6 +267,19 @@ definitions:
       itineraries:
         items:
           $ref: '#/definitions/itineraries.Itinerary'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
+  itineraries.ResponseGetDestinations:
+    properties:
+      destinations:
+        items:
+          $ref: '#/definitions/itineraries.DestionationInfo'
         type: array
       limit:
         type: integer
@@ -562,6 +628,70 @@ info:
   title: TravelTales App
   version: "1.0"
 paths:
+  /destination/create:
+    post:
+      consumes:
+      - application/json
+      description: this is for creating destination
+      parameters:
+      - description: all params are required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/itineraries.RequestCreateDestination'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns new destination information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseCreateDestination'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Create Destination
+      tags:
+      - Destinations
+  /destination/top:
+    get:
+      consumes:
+      - application/json
+      description: this is for getting top desctinations information
+      parameters:
+      - description: limit is required
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page is required
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: returns top destinations' information
+          schema:
+            $ref: '#/definitions/itineraries.ResponseGetDestinations'
+        "400":
+          description: It occurs when user enter invalid params
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: It occurs when error happenes internal service
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get Top Destinations
+      tags:
+      - Destinations
   /interaction/comment/create:
     post:
       consumes:

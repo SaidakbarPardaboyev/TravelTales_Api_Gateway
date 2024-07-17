@@ -281,8 +281,91 @@ func (h *Handler) WriteCommentToItinerary(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateItineraries(ctx *gin.Context) {}
-// func (h *Handler) CreateItineraries(ctx *gin.Context) {}
+// @Summary Create Destination
+// @Description this is for creating destination
+// @Tags Destinations
+// @Accept json
+// @Produce json
+// @Param request body itineraries.RequestCreateDestination true "all params are required"
+// @Success 200 {object} itineraries.ResponseCreateDestination "returns new destination information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /destination/create [post]
+func (h *Handler) CreateDestination(ctx *gin.Context) {
+	req := pb.RequestCreateDestination{}
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error with decoding url body: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": fmt.Sprintf("Error with decoding url body: %s", err.Error()),
+		})
+		return
+	}
+
+	resp, err := h.ItinerariesClient.CreateDestination(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting CreateDestination method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting CreateDestination method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// @Summary Get Top Destinations
+// @Description this is for getting top desctinations information
+// @Tags Destinations
+// @Accept json
+// @Produce json
+// @Param limit query int true "limit is required"
+// @Param page query int true "page is required"
+// @Success 200 {object} itineraries.ResponseGetDestinations "returns top destinations' information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /destination/top [get]
+func (h *Handler) GetDestinations(ctx *gin.Context) {
+	limit, err := strconv.Atoi(ctx.Query("limit"))
+	if err != nil {
+		h.Logger.Error("limit param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "limit param is invalid",
+		})
+		return
+	}
+
+	page, err := strconv.Atoi(ctx.Query("page"))
+	if err != nil {
+		h.Logger.Error("page param is invalid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "page param is invalid",
+		})
+		return
+	}
+
+	req := pb.RequestGetDestinations{
+		Limit: int32(limit),
+		Page:  int32(page),
+	}
+	resp, err := h.ItinerariesClient.GetDestinations(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetDestinations method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetDestinations method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
