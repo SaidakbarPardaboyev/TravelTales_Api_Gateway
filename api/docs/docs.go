@@ -116,6 +116,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/itineraries/{id}/": {
+            "get": {
+                "description": "this is for getting itinerary full information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Itineraries"
+                ],
+                "summary": "Get Itinerary Full Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id is required",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "returns itinerary full information",
+                        "schema": {
+                            "$ref": "#/definitions/itineraries.ResponseGetItineraryFullInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "It occurs when user enter invalid params",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It occurs when error happenes internal service",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/itineraries/{id}/edit": {
             "put": {
                 "description": "this is for editing itinerary",
@@ -1298,6 +1342,47 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "itineraries.ResponseGetItineraryFullInfo": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/itineraries.Author"
+                },
+                "comments_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "destinations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/itineraries.DestinationEdit"
+                    }
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "likes_count": {
+                    "type": "integer"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },

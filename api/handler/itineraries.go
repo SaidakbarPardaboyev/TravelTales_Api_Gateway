@@ -176,7 +176,53 @@ func (h *Handler) GetAllItineraries(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// func (h *Handler) CreateItineraries(ctx *gin.Context) {}
+// @Summary Get Itinerary Full Info
+// @Description this is for getting itinerary full information
+// @Tags Itineraries
+// @Accept json
+// @Produce json
+// @Param id path string true "id is required"
+// @Success 200 {object} itineraries.ResponseGetItineraryFullInfo "returns itinerary full information"
+// @Failure 400 {object} models.Error "It occurs when user enter invalid params"
+// @Failure 500 {object} models.Error "It occurs when error happenes internal service"
+// @Router /itineraries/{id}/ [get]
+func (h *Handler) GetItineraryFullInfo(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		h.Logger.Error("id not found from url params")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "id not found from url params",
+		})
+		return
+	}
+
+	if _, err := uuid.Parse(id); err != nil {
+		h.Logger.Error("invalid uuid")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "http.StatusBadRequest",
+			"massege": "invalid uuid",
+		})
+		return
+	}
+
+	req := pb.RequestGetItineraryFullInfo{
+		Id: id,
+	}
+
+	resp, err := h.ItinerariesClient.GetItineraryFullInfo(ctx, &req)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("error with requesting GetItineraryFullInfo method: %s", err.Error()))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error":   "http.StatusInternalServerError",
+			"massege": fmt.Sprintf("Error with requesting GetItineraryFullInfo method: %s", err),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}
 // func (h *Handler) CreateItineraries(ctx *gin.Context) {}

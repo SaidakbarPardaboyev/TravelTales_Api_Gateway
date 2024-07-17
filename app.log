@@ -103,3 +103,4 @@ time=2024-07-17T11:52:04.353+05:00 level=ERROR msg="error with requesting EditIt
 time=2024-07-17T11:52:10.981+05:00 level=ERROR msg="error with requesting EditItineraries method: rpc error: code = Unknown desc = pq: invalid input syntax for type date: \"string\""
 time=2024-07-17T11:52:28.536+05:00 level=ERROR msg="error with requesting EditItineraries method: rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"string\""
 time=2024-07-17T11:53:18.393+05:00 level=ERROR msg="error with requesting EditItineraries method: rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"string\""
+time=2024-07-17T14:28:59.836+05:00 level=ERROR msg="invalid uuid"

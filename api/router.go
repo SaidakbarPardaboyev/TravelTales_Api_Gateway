@@ -58,6 +58,7 @@ func NewRouter() *gin.Engine {
 	users.POST("/:id/itineraries/create", h.CreateItineraries)
 	itineraries.PUT("/:id/edit", h.EditItineraries)
 	itineraries.GET("/", h.GetAllItineraries)
+	itineraries.GET("/:id", h.GetItineraryFullInfo)
 
 	return r
 }
